@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/three@0.146.0/build/three.min.js"></script>
+    <style>
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 25px;
+          padding: 30px;
+          line-height: 1.6;
+          margin: 0;
+      }
+
+        #canvas {
+            width: 200px;
+            height: 200px;
+            border: none;
+            padding: 0px;
+            position: static; /* fixed or static */
+            left: 100px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body onload="brython()" >
+    
+    
+    <div id="canvas">
+        <h2 id="three" ></h2>
+    </div>
+
+    <script type="text/python" id="0">
+        from browser import document, window
+        THREE = window.THREE
+
+        document["three"] <= "Three JS"
+        scene = THREE.Scene.new()
+        camera = THREE.PerspectiveCamera.new( 75, 1, 0.1, 1000)
+        container = document["canvas"]
+        document.body <= container
+        renderer = THREE.WebGLRenderer.new()
+        renderer.setSize(200, 200)
+        container <= renderer.domElement
+        
+        geometry = THREE.BoxGeometry.new( 1, 1, 1 )
+        material = THREE.MeshBasicMaterial.new( { "color": "#ff0000" } );
+        cube = THREE.Mesh.new( geometry, material );
+        scene.add(cube)
+
+        camera.position.z = 5
+
+        def animate(i):
+            window.requestAnimationFrame(animate)
+
+            cube.rotation.x += 0.01
+            cube.rotation.y += 0.02
+
+            renderer.render(scene, camera)   
+
+        animate(0)
+    </script>
+</body>
+</html>

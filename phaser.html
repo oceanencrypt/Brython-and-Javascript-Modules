@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+</head>
+<body onload="brython()">
+    
+    <script type="text/python">
+        from browser import window, document, console, bind
+        import javascript
+
+        Phaser = window.Phaser
+        console.log(Phaser.Math)
+        class Game(object):
+            def __init__(self):
+                self.game = window.Phaser.Game.new(
+                    {
+                        'type': Phaser.AUTO,
+                        'width': 800,
+                        'height': 600,
+                        'scene': {
+                            'preload': self.preload,
+                            'create': self.create
+                        }
+                    }
+                )
+            
+            def preload(self, *args):
+                this = javascript.this()
+                this.load.setBaseURL('//labs.phaser.io')
+                this.load.atlas('soldier', 'assets/animations/soldier.png', 'assets/animations/soldier.json')
+                this.load.image('bg', 'assets/skies/grass.jpg')
+                this.load.image('red', 'assets/particles/red.png')
+            
+            def create(self, *args):
+                this = javascript.this()
+                this.add.image(400, 300, 'bg')
+                this.add.text(400, 32, 'Click to pause all animations', { 'color': '#ffffff' }).setOrigin(0.5, 0)
+                this.anims.create({
+                    'key': 'shoot1',
+                    'frames': this.anims.generateFrameNames('soldier', { 'prefix': 'Soldier_2_shot_up_', 'start': 1, 'end': 11 }),
+                    'frameRate': 10,
+                    'repeat': -1
+                })
+                this.anims.create({
+                    'key': 'shoot2',
+                    'frames': this.anims.generateFrameNames('soldier', { 'prefix': 'soldier_3_shoot_front_', 'start': 1, 'end': 11 }),
+                    'frameRate': 10,
+                    'repeat': -1
+                })
+                for i in range(32):
+                    x = Phaser.Math.Between(0, 800)
+                    y = Phaser.Math.Between(200, 550)
+                    rd = Phaser.Math.Between(200, 2000)
+                    troop = None
+                    if i < 16:
+                        troop = this.add.sprite(x, y, 'soldier', 'Soldier_2_shot_up_1')
+                        troop.setDepth(y)
+                        troop.playAfterDelay({ 'key': 'shoot1', 'repeatDelay': rd }, rd)
+                    else:
+                        troop = this.add.sprite(x, y, 'soldier', 'soldier_3_shoot_front_1')
+                        troop.setDepth(y)
+                        troop.playAfterDelay({ 'key': 'shoot2', 'repeatDelay': rd }, rd)
+
+                
+                @bind("canvas","click")
+                def pointer(ev):
+                    if this.anims.paused:
+                        this.anims.resumeAll()
+                    else:
+                        this.anims.pauseAll()
+        
+        GAME = Game()
+                
+                
+
+            
+
+        
+    </script>
+</body>
+</html>

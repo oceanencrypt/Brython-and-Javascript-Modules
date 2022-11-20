@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Raphaël · Playground</title>
+        <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/raphael@2.3.0/raphael.min.js"></script>
+        <style media="screen">
+            body {
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            h1 {
+                font-weight: 400;
+                margin-bottom: 10px;
+            }
+            #canvas {
+                border: 1px solid black;
+                border-radius: 10px;
+                height: 480px;
+                margin: 0 auto;
+                text-align: left;
+                width: 640px;
+            }
+            #code {
+                font-family: Consolas, Monaco, "Lucida Console", monospace;
+                height: 4em;
+                margin: 10px;
+                padding: 0;
+                width: 90%;
+            }
+            #run {
+                font-size: 2em;
+            }
+        </style>
+    </head>
+    <body onload="brython()">
+        <h1>Raphaël JS Playground</h1>
+        <div id="canvas"></div>
+        <div><textarea id="code">paper.circle(320, 240, 60).animate({"fill": "#223fa3", "stroke": "#0f0", "stroke-width": 100, "stroke-opacity": 0.9}, 2000);</textarea></div>
+        <div><button id="run" type="button">Run</button></div>
+    </body>
+
+    <script type="text/python" id="0">
+        from browser import document, window
+
+        paper = window.Raphael("canvas", 640, 480)
+        btn = document["run"]
+        cd = document["code"]
+
+        def callback(ev):
+            paper.clear()
+            r = paper.rect(0, 0, 640, 480, 10)
+            r.attr({'fill': "#fff", 'stroke':"none"})
+
+            exec(cd.value)
+
+        btn.bind('click', callback)
+        callback(None)
+    </script>
+</html>

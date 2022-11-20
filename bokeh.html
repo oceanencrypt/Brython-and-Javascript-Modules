@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.4.3.min.js"></script>
+    <style>
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 25px;
+          padding: 30px;
+          line-height: 1.6;
+          margin: 0;
+      }
+    </style>
+</head>
+<body onload="brython()" >
+    
+    <h2>Brokeh JS</h2>
+    <div id="myplot"></div>
+    <script type="text/python" id="0">
+        from browser import document, window, console
+
+        Bokeh = window.Bokeh
+        console.log(Bokeh)
+        plt = Bokeh.Plotting
+
+        bar_data = [
+            ['City', '2010 Population', '2000 Population'],
+            ['NYC', 8175000, 8008000],
+            ['LA', 3792000, 3694000],
+            ['Chicago', 2695000, 2896000],
+            ['Houston', 2099000, 1953000],
+            ['Philadelphia', 1526000, 1517000],
+        ];
+
+        p1 = Bokeh.Charts.bar(bar_data, {
+            'axis_number_format': "0.[00]a"
+        });
+        p2 = Bokeh.Charts.bar(bar_data, {
+            'axis_number_format': "0.[00]a",
+            'stacked': True
+        });
+        p3 = Bokeh.Charts.bar(bar_data, {
+            'axis_number_format': "0.[00]a",
+            'orientation': "vertical"
+        });
+        p4 = Bokeh.Charts.bar(bar_data, {
+            'axis_number_format': "0.[00]a",
+            'orientation': "vertical",
+            'stacked': True
+        });
+
+        mydiv = document['myplot']
+        plt.show(plt.gridplot([[p1, p2], [p3, p4]], {'width': 350, 'height': 350}), mydiv);
+
+    </script>
+</body>
+</html>
